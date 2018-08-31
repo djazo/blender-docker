@@ -36,7 +36,17 @@ RUN apt-get update && apt-get upgrade -y --no-install-recommends \
     yasm \
     wget \
     gawk \
-    && rm -rf /var/lib/apt/lists/*
+	nasm \
+	tcl \
+    python \
+	libffi-dev \
+    libopenjp2-7-dev \
+    && rm -rf /var/lib/apt/lists/* \
+	&& wget https://www.nasm.us/pub/nasm/releasebuilds/2.13.03/nasm-2.13.03.tar.gz \
+	&& tar xzf nasm-2.13.03.tar.gz \
+	&& cd nasm-2.13.03 \
+	&& ./configure && make && make install
+	
 
 VOLUME /data/blender /data/lib /data/build
 
