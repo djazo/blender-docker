@@ -35,7 +35,7 @@ function config_blender() {
 # openal seems to be the only one that cmake can't set correctly, doing manually that.
 
   cmake ${BLENDER_SRC_DIR} -C${BLENDER_SRC_DIR}/build_files/cmake/config/blender_release.cmake -DWITH_PLAYER=OFF \
-    -DOPENAL_LIBRARY=${LIB_DIR}/openal/lib/libopenal.a -DOPENAL_INCLUDE_DIR=${LIB_DIR}/openal/include
+    -DOPENAL_LIBRARY=${LIB_DIR}/openal/lib/libopenal.a -DOPENAL_INCLUDE_DIR=${LIB_DIR}/openal/include/AL -DWITH_SYSTEM_OPENJPEG=ON
 }
 
 function build_blender() {
