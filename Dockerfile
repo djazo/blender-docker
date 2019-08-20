@@ -1,7 +1,6 @@
 # Docker image for building blender for linux
 
-FROM debian:stretch
-MAINTAINER arto.kitula@gmail.com
+FROM debian:buster
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -38,7 +37,7 @@ RUN apt-get update && apt-get upgrade -y --no-install-recommends \
     gawk \
     && rm -rf /var/lib/apt/lists/*
 
-VOLUME /data/blender /data/lib /data/build
+VOLUME /data
 
 COPY ./entrypoint.sh /
 
