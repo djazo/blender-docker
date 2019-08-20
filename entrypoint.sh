@@ -2,20 +2,21 @@
 
 # Entrypoint script for building blender from source.
 
-DATA_DIR="/data"
 BLENDER_SRC_DIR="/data/blender"
-BLENDER_BUILD_DIR="/data/build"
-LIB_BUILD_DIR="/data/build-lib"
+BLENDER_BUILD_DIR="/data/build-linux"
+LIB_BUILD_DIR="/data/build-lib-linux"
 LIB_DIR="/data/lib/linux_x86_64"
-MAXTHREADS=$(grep -c ^processor /proc/cpuinfo)
+CPUCOUNT=$(grep -c ^processor /proc/cpuinfo)
 
 function build_libs() {
   if [ ! -d ${LIB_BUILD_DIR} ]; then
     mkdir -p ${LIB_BUILD_DIR}
   fi
   cd ${LIB_BUILD_DIR}
-  cmake ${BLENDER_SRC_DIR}/build_files/build_environment -DLIBDIR=${LIB_DIR} -DDOWNLOAD_DIR=${LIB_BUILD_DIR}/Download -DHARVEST_TARGET=${LIB_DIR}
-  make -j${MAXTHREADS} install
+  if [ ! -f CMakeCache.txt ]; then
+      cmake ${BLENDER_SRC_DIR}/build_files/build_environment -DLIBDIR=${LIB_DIR} -DDOWNLOAD_DIR=${LIB_BUILD_DIR}/Download -DHARVEST_TARGET=${LIB_DIR}
+  fi
+  make -j${CPUCOUNT} install
 }
 
 function config_blender() {
@@ -34,14 +35,14 @@ function config_blender() {
 
 # openal seems to be the only one that cmake can't set correctly, doing manually that.
 
-  cmake ${BLENDER_SRC_DIR} -C${BLENDER_SRC_DIR}/build_files/cmake/config/blender_release.cmake -DWITH_PLAYER=OFF \
-    -DOPENAL_LIBRARY=${LIB_DIR}/openal/lib/libopenal.a -DOPENAL_INCLUDE_DIR=${LIB_DIR}/openal/include
+  cmake ${BLENDER_SRC_DIR} -C${BLENDER_SRC_DIR}/build_files/cmake/config/blender_release.cmake
+  
 }
 
 function build_blender() {
   config_blender
   cd ${BLENDER_BUILD_DIR}
-  make -j${MAXTHREADS} install
+  make -j${CPUCOUNT} install
 }
 
 
